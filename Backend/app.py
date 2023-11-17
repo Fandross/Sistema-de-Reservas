@@ -1,15 +1,85 @@
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
+import jwt
+from datetime import datetime, timedelta, timezone
+import os
+import secrets
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
-app.secret_key = 'your_secret_key'
 
+# Defina as chaves secretas a partir das variáveis de ambiente ou gere novas se não estiverem definidas
+app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
+JWT_SECRET = os.getenv('JWT_SECRET', secrets.token_urlsafe(32))
+
+usuarios = []
 eventos = [
     {"id": 1, "nome": "Rodizio de Pizzas por R$19,90", "data": "01-12-2023", "horario": "18:00", "capacidade": 50},
     {"id": 2, "nome": "Rodizio de Massas por R$29,90", "data": "06-12-2023", "horario": "19:30", "capacidade": 30},
 ]
 
+# Função para gerar um token JWT
+def generate_jwt(email):
+    expiration_time = datetime.now(timezone.utc) + timedelta(hours=1)  # Token expira em 1 hora
+    payload = {'email': email, 'exp': expiration_time}
+    token = jwt.encode(payload, JWT_SECRET, algorithm='HS256')
+    return token
+
+# Verifica as credenciais (substitua por sua lógica de autenticação real)
+def verify_credentials(email, password):
+    return email == 'seu_email' and password == 'sua_senha'
+
+# Autentica o usuário e retorna o email autenticado
+def authenticate_user(email, password):
+    user = next((user for user in usuarios if user['email'] == email), None)
+    
+    if user and user['password'] == password:
+        return email
+    else:
+        return None
+
+# Rota de login
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    authenticated_email = authenticate_user(email, password)
+
+    if authenticated_email:
+        # Gera o token JWT após autenticação bem-sucedida
+        token = generate_jwt(authenticated_email)
+        return jsonify({'token': token}), 200
+    else:
+        return jsonify({'mensagem': 'Credenciais inválidas'}), 401
+
+# Rota de cadastro
+@app.route('/cadastro', methods=['POST'])
+def cadastrar_usuario():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    # Verifique se o usuário já existe
+    if usuario_existe(email):
+        return jsonify({'mensagem': 'Usuário já cadastrado'}), 400
+
+    # Adicione o novo usuário à lista de usuários
+    adicionar_usuario(email, password)
+
+    # Gera o token JWT após o cadastro bem-sucedido
+    token = generate_jwt(email)
+
+    return jsonify({'mensagem': 'Cadastro realizado com sucesso!', 'token': token}), 200
+
+# Função para verificar se o usuário já existe
+def usuario_existe(email):
+    return any(usuario['email'] == email for usuario in usuarios)
+
+# Função para adicionar um novo usuário
+def adicionar_usuario(email, password):
+    usuarios.append({'email': email, 'password': password})
 reservas = []
 email_acesso = None  # Adicione esta linha
 
