@@ -11,6 +11,29 @@ function parseJwt(token) {
   return JSON.parse(window.atob(base64));
 }
 
+// Função para verificar e cadastrar o usuário admin
+const checkAndCreateAdminUser = async () => {
+  try {
+    // Verificar se o usuário admin já existe
+    const response = await fetch('http://127.0.0.1:5000/usuarios/admin');
+    if (!response.ok) {
+      // Se não existir, cadastrar o usuário admin com senha 'admin'
+      await fetch('http://127.0.0.1:5000/usuarios', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'admin',
+          password: 'admin',
+        }),
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao verificar/cadastrar usuário admin:', error);
+  }
+};
+
 function App() {
   const [backendMessage, setBackendMessage] = useState('');
   const [eventos, setEventos] = useState([]);
@@ -21,12 +44,15 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Verificar e cadastrar o usuário admin
+    checkAndCreateAdminUser();
     const storedToken = localStorage.getItem('token');
+    let userEmail = ""
     if (storedToken) {
       const decodedToken = parseJwt(storedToken);
-      const userEmail = decodedToken.email;
+      let userEmail = decodedToken.email;
       setEmailUsuario(userEmail);
-
+      console.log(userEmail)
       fetch('http://127.0.0.1:5000/', {
         credentials: 'include',
         headers: {
@@ -39,6 +65,7 @@ function App() {
     }
 
     setIsAdmin(emailUsuario === 'admin');
+    console.log(isAdmin)
 
     fetch('http://127.0.0.1:5000/eventos', { credentials: 'include' })
       .then(response => response.json())

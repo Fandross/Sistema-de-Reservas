@@ -12,11 +12,27 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
 JWT_SECRET = os.getenv('JWT_SECRET', secrets.token_urlsafe(32))
 
-usuarios = []
+usuarios = [
+    {"email": "admin", "password": "admin"}
+]
 eventos = [
     {"id": 1, "nome": "Rodizio de Pizzas por R$19,90", "data": "01-12-2023", "horario": "18:00", "capacidade": 50},
     {"id": 2, "nome": "Rodizio de Massas por R$29,90", "data": "06-12-2023", "horario": "19:30", "capacidade": 30},
 ]
+
+# Função para verificar e criar o usuário admin se não existir
+def check_and_create_admin_user():
+    admin_exists = any(user['email'] == 'admin' for user in usuarios)
+    
+    if not admin_exists:
+        # Se o usuário admin não existir, cria-o
+        usuarios.append({"email": "admin", "password": "admin"})
+
+# Rota para verificar e criar o usuário admin
+@app.route('/usuarios/admin', methods=['GET'])
+def check_admin_user():
+    check_and_create_admin_user()
+    return jsonify({'message': 'Usuário admin verificado/criado com sucesso'})
 
 # Função para gerar um token JWT
 def generate_jwt(email):
