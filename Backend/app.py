@@ -24,7 +24,7 @@ def listar_eventos():
 # Registrar Evento
 @app.route('/eventos/<int:evento_id>/registrar', methods=['POST'])
 def registrar_evento(evento_id):
-    global reservas, email_acesso
+    global reservas
 
     evento = next((e for e in eventos if e['id'] == evento_id), None)
     if evento is None:
@@ -37,16 +37,17 @@ def registrar_evento(evento_id):
     if any(reserva['evento']['id'] == evento_id and reserva['emailUsuario'] == email_usuario for reserva in reservas):
         return jsonify({"mensagem": "Você já está registrado para este evento."}), 400
 
-    # Se o usuário não estiver registrado, atualize o email_acesso
-    if email_acesso is None:
-        email_acesso = email_usuario
+    # Se o usuário não estiver registrado, atualize o email_acesso na sessão
+    if 'email_acesso' not in session:
+        session['email_acesso'] = email_usuario
 
     # Verificar se o email do usuário é o mesmo usado para acessar o site
-    if email_usuario != email_acesso:
+    if email_usuario != session['email_acesso']:
         return jsonify({"mensagem": "Você só pode se registrar com o mesmo email usado para acessar o site."}), 400
 
     reservas.append({"evento": evento, "emailUsuario": email_usuario})
     return jsonify({"mensagem": "Registro feito com sucesso!"})
+
 # Detalhes do Evento
 @app.route('/eventos/<int:evento_id>/detalhes', methods=['GET'])
 def detalhes_evento(evento_id):
