@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from "./Paginas/Home.tsx"
-import Login from './Paginas/Login.tsx'
+import Login from './Paginas/Login.jsx'
 import Cadastro from './Paginas/Cadastro.tsx';
 import Dashboard from './Paginas/Dashboard.jsx';
 

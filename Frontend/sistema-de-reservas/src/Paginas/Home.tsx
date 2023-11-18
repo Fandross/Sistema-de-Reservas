@@ -1,27 +1,32 @@
 // No componente Home.js
+import './css/tailwind.css';
 import React, { useState } from 'react';
+import BarraDeNavegacao from './modulos/BarraDeNavegacao.tsx';
+import BannerDeEventos from './modulos/BannerDeEventos.tsx';
+import BannerPrincipal from './modulos/BannerPrincipal.jsx';
 
-function Home({ nomeUsuario, isAuthenticated }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const mensagem = nomeUsuario !== "Default"
-  ? `Você está logado como ${nomeUsuario} !`
-  : 'Você está logado como Default!';
+function Home() {
+    const [mensagem, setMensagem] = useState('');
 
     const handleLogin = () => {
-        return console.log("LOGOU");
+        console.log("LOGOU");
     };
 
     return (
         <div>
-            <h2>Ola</h2>
-            {(
-                <div>
-                    <h2>Mensagem do Backend:</h2> <p>{mensagem}</p>
-                </div>
-            )}
+            <header>
+                <BarraDeNavegacao />
+            </header>
+            <div className=''>
+                <BannerPrincipal />
+            </div>
+            <div>
+
+                <BannerDeEventos/>
+            </div>
+
         </div>
     );
 }
+
 export default Home;

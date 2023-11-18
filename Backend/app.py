@@ -23,7 +23,9 @@ usuarios = [
 ]
 eventos = [
     {"id": 1, "nome": "Rodizio de Pizzas por R$19,90", "data": "01-12-2023", "horario": "18:00", "capacidade": 50},
-    {"id": 2, "nome": "Rodizio de Massas por R$29,90", "data": "06-12-2023", "horario": "19:30", "capacidade": 30},
+    {"id": 2, "nome": "Rodizio de Massas por R$39,90", "data": "06-12-2023", "horario": "19:30", "capacidade": 30},
+    {"id": 3, "nome": "Rodizio de Molhos por R$29,90", "data": "03-12-2023", "horario": "20:30", "capacidade": 100},
+    
 ]
 
 # Função para verificar e criar o usuário admin se não existir

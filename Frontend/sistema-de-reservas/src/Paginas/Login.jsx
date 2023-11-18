@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import BarraDeNavegacao from './modulos/BarraDeNavegacao.tsx';
+import { useNavigate } from 'react-router-dom';
 
-function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
-  const handleCadastro = async () => {
+  const handleLogin = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/cadastro', {
+      const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,19 +19,18 @@ function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
       const data = await response.json();
   
       if (response.ok) {
-        // Se o cadastro for bem-sucedido, atualize o nome do usuário e armazene o token
-
+        // Autenticação bem-sucedida, atualize o nome do usuário e armazene o token
         console.log('Token recebido:', data.token);
-        onLogin(email);
+        // onLogin(email);
         localStorage.setItem('token', data.token);
-        
-        alert('Cadastro realizado com sucesso!');
+        console.log('Logado!')
         navigate('/');
       } else {
-        alert('Email já cadastrado!');
+        // Exiba uma mensagem de erro
+        alert(data.mensagem);
       }
     } catch (error) {
-      console.error('Erro ao cadastrar:', error);
+      console.error('Erro ao fazer login:', error);
     }
   };
 
@@ -49,8 +47,8 @@ function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <div className="flex items-center justify-between">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={handleCadastro}>
-            Cadastrar
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>
+            Login
           </button>
         </div>
       </form>
@@ -58,4 +56,4 @@ function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
   );
 }
 
-export default Cadastro;
+export default Login;
