@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from "./Paginas/Home.tsx"
 import Login from './Paginas/Login.tsx'
 import Cadastro from './Paginas/Cadastro.tsx';
+import Dashboard from './Paginas/Dashboard.jsx';
+
 
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
@@ -194,6 +196,7 @@ function App() {
         <Route path="/cadastro" element={<Cadastro isAdmin={isAdmin} nomeUsuario={emailUsuario} onLogin={setEmailUsuario} setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/login" element={<Login nomeUsuario={emailUsuario} setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/" element={<Home nomeUsuario={emailUsuario} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/dashboard" element={<Dashboard nomeUsuario={emailUsuario} isAdmin={isAdmin} />} />
       </Routes>
     </Router>
   );

@@ -5,8 +5,14 @@ from datetime import datetime, timedelta, timezone
 import os
 import secrets
 
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+
+# Configure a extensão Session
+app.config['SESSION_TYPE'] = 'filesystem'
+# session(app)
+
 
 # Defina as chaves secretas a partir das variáveis de ambiente ou gere novas se não estiverem definidas
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
@@ -89,6 +95,8 @@ def cadastrar_usuario():
 
     return jsonify({'mensagem': 'Cadastro realizado com sucesso!', 'token': token}), 200
 
+
+
 # Função para verificar se o usuário já existe
 def usuario_existe(email):
     return any(usuario['email'] == email for usuario in usuarios)
@@ -106,6 +114,11 @@ def hello():
 @app.route('/eventos', methods=['GET'])
 def listar_eventos():
     return jsonify(eventos)
+
+# Listar Reservas
+@app.route('/reservas', methods=['GET'])
+def listar_reservas():
+    return jsonify(reservas)
 
 # Registrar Evento
 @app.route('/eventos/<int:evento_id>/registrar', methods=['POST'])
