@@ -8,6 +8,7 @@ function Dashboard({ isAdmin }) {
   const [reservas, setReservas] = useState([]);
   const [reservasAtivas, setReservasAtivas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [logs, setLogs] = useState(''); // Novo estado para os logs
 
   // Função para decodificar o token JWT
   const parseJwt = (token) => {
@@ -18,6 +19,22 @@ function Dashboard({ isAdmin }) {
     }
   };
 
+  // UseEffect para obter os logs
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/logs');
+        const data = await response.text();
+        setLogs(data);
+      } catch (error) {
+        console.error('Erro ao obter logs:', error);
+      }
+    };
+
+    fetchLogs();
+  }, []);
+
+  // UseEffect para obter os dados
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -138,6 +155,28 @@ function Dashboard({ isAdmin }) {
                 ) : (
                   <p>Nenhuma reserva ativa.</p>
                 )}
+                <div className="mt-8">
+                  <h2 className="text-2xl font-bold mb-4">Logs:</h2>
+                  {logs.length > 0 ? (
+                    <ul className="list-disc pl-5">
+                      <a href="http://127.0.0.1:5000/logs" target="_blank" rel="noopener noreferrer" style={{
+                        display: 'inline-block',
+                        padding: '10px 20px',
+                        color: '#fff',
+                        backgroundColor: '#007BFF',
+                        border: 'none',
+                        borderRadius: '4px',
+                        textDecoration: 'none',
+                        textAlign: 'center',
+                        fontSize: '16px',
+                      }}>
+                        Abrir relatório
+                      </a>
+                    </ul>
+                  ) : (
+                    <p>Nenhum log disponível.</p>
+                  )}
+                </div>
               </div>
             )}
 
@@ -163,7 +202,8 @@ function Dashboard({ isAdmin }) {
               </div>
             )}
           </>
-        )}</div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,23 +1,24 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session , send_from_directory
 from flask_cors import CORS
-import jwt
+from flask import send_file
 from datetime import datetime, timedelta, timezone
+import jwt
 import os
 import secrets
 
-
+# Configure o Flask para usar o CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 # Configure a extensão Session
 app.config['SESSION_TYPE'] = 'filesystem'
-# session(app)
-
+# session(app) # teste
 
 # Defina as chaves secretas a partir das variáveis de ambiente ou gere novas se não estiverem definidas
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
 JWT_SECRET = os.getenv('JWT_SECRET', secrets.token_urlsafe(32))
 
+# Dados de exemplo
 usuarios = [
     {"email": "admin", "password": "admin"}
 ]
@@ -36,12 +37,6 @@ def check_and_create_admin_user():
         # Se o usuário admin não existir, cria-o
         usuarios.append({"email": "admin", "password": "admin"})
 
-# Rota para verificar e criar o usuário admin
-@app.route('/usuarios/admin', methods=['GET'])
-def check_admin_user():
-    check_and_create_admin_user()
-    return jsonify({'message': 'Usuário admin verificado/criado com sucesso'})
-
 # Função para gerar um token JWT
 def generate_jwt(email):
     expiration_time = datetime.now(timezone.utc) + timedelta(hours=1)  # Token expira em 1 hora
@@ -51,7 +46,8 @@ def generate_jwt(email):
 
 # Verifica as credenciais (substitua por sua lógica de autenticação real)
 def verify_credentials(email, password):
-    return email == 'seu_email' and password == 'sua_senha'
+    user = next((user for user in usuarios if user['email'] == email), None)
+    return user is not None and user['password'] == password
 
 # Autentica o usuário e retorna o email autenticado
 def authenticate_user(email, password):
@@ -62,10 +58,21 @@ def authenticate_user(email, password):
     else:
         return None
 
+# Função para verificar se o usuário já existe
+def usuario_existe(email):
+    return any(usuario['email'] == email for usuario in usuarios)
+
+# Função para adicionar um novo usuário
+def adicionar_usuario(email, password):
+    usuarios.append({'email': email, 'password': password})
+reservas = []
+email_acesso = None 
+
 # Rota de login
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
+    print(f"Data received: {data}")
     email = data.get('email')
     password = data.get('password')
 
@@ -97,22 +104,12 @@ def cadastrar_usuario():
 
     return jsonify({'mensagem': 'Cadastro realizado com sucesso!', 'token': token}), 200
 
-
-
-# Função para verificar se o usuário já existe
-def usuario_existe(email):
-    return any(usuario['email'] == email for usuario in usuarios)
-
-# Função para adicionar um novo usuário
-def adicionar_usuario(email, password):
-    usuarios.append({'email': email, 'password': password})
-reservas = []
-email_acesso = None  # Adicione esta linha
-
+# Rota inicial
 @app.route('/')
 def hello():
     return 'Backend do Sistema de Reservas Ativado'
 
+# Listar eventos
 @app.route('/eventos', methods=['GET'])
 def listar_eventos():
     return jsonify(eventos)
@@ -180,6 +177,22 @@ def excluir_reserva(evento_id, email_reserva):
 
     reservas.remove(reservas_evento[0])
     return jsonify({"mensagem": "Reserva excluída com sucesso!"})
+
+# Rotas robot.robot
+@app.route('/logs', methods=['GET'])
+def get_logs():
+    try:
+        return send_file('testeunitario/report.html', mimetype='text/html')
+    except FileNotFoundError:
+        return jsonify({'mensagem': 'Arquivo de log não encontrado'}), 404
+
+@app.route('/log.html')
+def serve_log():
+    return send_from_directory('testeunitario/', 'log.html')
+
+@app.route('/report.html')
+def serve_report():
+    return send_from_directory('testeunitario/', 'report.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
