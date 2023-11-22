@@ -4,13 +4,10 @@ import React, { useState } from 'react';
 import BarraDeNavegacao from './modulos/BarraDeNavegacao.tsx';
 import BannerDeEventos from './modulos/BannerDeEventos.tsx';
 import BannerPrincipal from './modulos/BannerPrincipal.jsx';
+import BannerFotosRodizio from './modulos/BannerFotosRodizio.jsx';
+import Footer from './modulos/footer.jsx';
 
 function Home() {
-    const [mensagem, setMensagem] = useState('');
-
-    const handleLogin = () => {
-        console.log("LOGOU");
-    };
 
     return (
         <div>
@@ -21,10 +18,14 @@ function Home() {
                 <BannerPrincipal />
             </div>
             <div>
-
                 <BannerDeEventos/>
             </div>
-
+            <div>
+                <BannerFotosRodizio />
+            </div>
+            <div>
+                <Footer />
+            </div>
         </div>
     );
 }

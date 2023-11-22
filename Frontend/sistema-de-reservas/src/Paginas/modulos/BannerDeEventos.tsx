@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import '../css/tailwind.css';
 
 interface Evento {
@@ -9,13 +9,13 @@ interface Evento {
     capacidade: number;
 }
 
-const BannerDeEventos = () => {
+const BannerDeEventos = memo(() => {
     const [eventos, setEventos] = useState<Evento[]>([]);
 
     useEffect(() => {
         fetch('http://127.0.0.1:5000/eventos')
             .then(response => response.json())
-            .then(data => setEventos(data));
+            .then(data => (setEventos(data)));
     }, []);
 
     const parseJwt = (token) => {
@@ -56,7 +56,6 @@ const BannerDeEventos = () => {
             fetch('http://127.0.0.1:5000/eventos')
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Lista de Eventos:', data);
                     setEventos(data);
                 })
                 .catch(error => console.error('Erro ao obter lista de eventos:', error));
@@ -83,6 +82,6 @@ const BannerDeEventos = () => {
             ))}
         </div>
     );
-};
+});
 
 export default BannerDeEventos;

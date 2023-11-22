@@ -7,6 +7,9 @@ module.exports = {
       clipPath: {
         'custom': 'polygon(0 0, 100% 0, 100% 100%, 65% 100%)',
       },
+      fontFamily: {
+        cursive: ['Cursive', 'serif'],
+      }
     },
   },
   variants: {

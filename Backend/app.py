@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 import os
 import secrets
+import subprocess
 
 # Configure o Flask para usar o CORS
 app = Flask(__name__)
@@ -20,13 +21,13 @@ JWT_SECRET = os.getenv('JWT_SECRET', secrets.token_urlsafe(32))
 
 # Dados de exemplo
 usuarios = [
-    {"email": "admin", "password": "admin"}
+    {"email": "admin", "password": "admin"},
 ]
+
 eventos = [
     {"id": 1, "nome": "Rodizio de Pizzas por R$19,90", "data": "01-12-2023", "horario": "18:00", "capacidade": 50},
     {"id": 2, "nome": "Rodizio de Massas por R$39,90", "data": "06-12-2023", "horario": "19:30", "capacidade": 30},
     {"id": 3, "nome": "Rodizio de Molhos por R$29,90", "data": "03-12-2023", "horario": "20:30", "capacidade": 100},
-    
 ]
 
 # Função para verificar e criar o usuário admin se não existir
@@ -182,17 +183,26 @@ def excluir_reserva(evento_id, email_reserva):
 @app.route('/logs', methods=['GET'])
 def get_logs():
     try:
-        return send_file('testeunitario/report.html', mimetype='text/html')
+        return send_file('report.html', mimetype='text/html')
     except FileNotFoundError:
         return jsonify({'mensagem': 'Arquivo de log não encontrado'}), 404
 
 @app.route('/log.html')
 def serve_log():
-    return send_from_directory('testeunitario/', 'log.html')
+    return send_from_directory('./', 'log.html')
 
 @app.route('/report.html')
 def serve_report():
-    return send_from_directory('testeunitario/', 'report.html')
+    return send_from_directory('./', 'report.html')
 
+# Rota para executar o teste
+@app.route('/rodar-teste-unitario', methods=['GET'])
+def run_test():
+    try:
+        result = subprocess.run(['robot', 'testeunitario/robot.robot'], stdout=subprocess.PIPE)
+        print(result.stdout.decode('utf-8'))
+        return result.stdout.decode('utf-8'), 200
+    except Exception as e:
+        return str(e), 500
 if __name__ == '__main__':
     app.run(debug=True)

@@ -8,7 +8,7 @@ function Dashboard({ isAdmin }) {
   const [reservas, setReservas] = useState([]);
   const [reservasAtivas, setReservasAtivas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [logs, setLogs] = useState(''); // Novo estado para os logs
+  const [logs, setLogs] = useState('');
 
   // Função para decodificar o token JWT
   const parseJwt = (token) => {
@@ -16,6 +16,17 @@ function Dashboard({ isAdmin }) {
       return JSON.parse(atob(token.split('.')[1]));
     } catch (e) {
       return null;
+    }
+  };
+
+  // Função para executar o teste
+  const executarTesteUnitario = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/rodar-teste-unitario');
+      const data = await response.text();
+      console.log(data); // Console para o mostrar o teste
+    } catch (error) {
+      console.error('Erro ao executar o teste unitário:', error);
     }
   };
 
@@ -171,7 +182,21 @@ function Dashboard({ isAdmin }) {
                         fontSize: '16px',
                       }}>
                         Abrir relatório
-                      </a>
+                      </a> <br />
+                      <button onClick={executarTesteUnitario} style={{
+                        display: 'inline-block',
+                        padding: '10px 20px',
+                        color: '#fff',
+                        backgroundColor: '#32CD32',
+                        border: 'none',
+                        borderRadius: '4px',
+                        textDecoration: 'none',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                        marginTop: '10px',
+                      }}>
+                        Executar Teste Unitário
+                      </button>
                     </ul>
                   ) : (
                     <p>Nenhum log disponível.</p>
