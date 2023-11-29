@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.12.0 on win32)" generated="20231122 10:18:11.372" rpa="false" schemaversion="4">
+<robot generator="Robot 6.1.1 (Python 3.12.0 on win32)" generated="20231122 19:19:28.350" rpa="false" schemaversion="4">
 <suite id="s1" name="Robot" source="D:\Estudos\Trabalho A3\Backend\testeunitario\robot.robot">
 <test id="s1-t1" name="Teste de Login" line="12">
 <kw name="Create Session" library="RequestsLibrary">
 <arg>alias=MySession</arg>
 <arg>url=${BASE_URL}</arg>
 <doc>Create Session: create a HTTP session to a server</doc>
-<msg timestamp="20231122 10:18:12.331" level="INFO">Creating Session using : alias=MySession, url=http://localhost:5000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
-<status status="PASS" starttime="20231122 10:18:12.331" endtime="20231122 10:18:12.331"/>
+<msg timestamp="20231122 19:19:28.954" level="INFO">Creating Session using : alias=MySession, url=http://localhost:5000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20231122 19:19:28.954" endtime="20231122 19:19:28.954"/>
 </kw>
 <kw name="Create Dictionary" library="BuiltIn">
 <var>${data}</var>
 <arg>email=admin</arg>
 <arg>password=admin</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<msg timestamp="20231122 10:18:12.331" level="INFO">${data} = {'email': 'admin', 'password': 'admin'}</msg>
-<status status="PASS" starttime="20231122 10:18:12.331" endtime="20231122 10:18:12.331"/>
+<msg timestamp="20231122 19:19:28.954" level="INFO">${data} = {'email': 'admin', 'password': 'admin'}</msg>
+<status status="PASS" starttime="20231122 19:19:28.954" endtime="20231122 19:19:28.954"/>
 </kw>
 <kw name="Create Dictionary" library="BuiltIn">
 <var>${headers}</var>
 <arg>Content-Type=application/json</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<msg timestamp="20231122 10:18:12.331" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
-<status status="PASS" starttime="20231122 10:18:12.331" endtime="20231122 10:18:12.331"/>
+<msg timestamp="20231122 19:19:28.954" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
+<status status="PASS" starttime="20231122 19:19:28.954" endtime="20231122 19:19:28.954"/>
 </kw>
 <kw name="POST On Session" library="RequestsLibrary">
 <var>${response}</var>
@@ -31,60 +31,60 @@
 <arg>json=${data}</arg>
 <arg>headers=${headers}</arg>
 <doc>Sends a POST request on a previously created HTTP Session.</doc>
-<msg timestamp="20231122 10:18:14.339" level="INFO">POST Request : url=http://localhost:5000/login 
+<msg timestamp="20231122 19:19:30.994" level="INFO">POST Request : url=http://localhost:5000/login 
  path_url=/login 
  headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '39'} 
  body=b'{"email": "admin", "password": "admin"}' 
  </msg>
-<msg timestamp="20231122 10:18:14.340" level="INFO">POST Response : url=http://localhost:5000/login 
+<msg timestamp="20231122 19:19:30.994" level="INFO">POST Response : url=http://localhost:5000/login 
  status=200, reason=OK 
- headers={'Server': 'Werkzeug/3.0.1 Python/3.12.0', 'Date': 'Wed, 22 Nov 2023 13:18:14 GMT', 'Content-Type': 'application/json', 'Content-Length': '145', 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Credentials': 'true', 'Connection': 'close'} 
+ headers={'Server': 'Werkzeug/3.0.1 Python/3.12.0', 'Date': 'Wed, 22 Nov 2023 22:19:30 GMT', 'Content-Type': 'application/json', 'Content-Length': '145', 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Credentials': 'true', 'Connection': 'close'} 
  body={
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwiZXhwIjoxNzAwNjYyNjk0fQ.Ogs9yXAKGB2lf8PfCGIVTOrJ7rxkYu7GMZEQQgWmxqw"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwiZXhwIjoxNzAwNjk1MTcwfQ.ymSpWB3GAZJAp3aMsVaR7JoeKw5MitWbXM7WOW5HN0E"
 }
  
  </msg>
-<msg timestamp="20231122 10:18:14.340" level="INFO">${response} = &lt;Response [200]&gt;</msg>
-<status status="PASS" starttime="20231122 10:18:12.332" endtime="20231122 10:18:14.340"/>
+<msg timestamp="20231122 19:19:30.994" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20231122 19:19:28.954" endtime="20231122 19:19:30.994"/>
 </kw>
 <kw name="Should Be Equal As Strings" library="BuiltIn">
 <arg>${response.status_code}</arg>
 <arg>200</arg>
 <doc>Fails if objects are unequal after converting them to strings.</doc>
-<msg timestamp="20231122 10:18:14.340" level="INFO">Argument types are:
+<msg timestamp="20231122 19:19:30.996" level="INFO">Argument types are:
 &lt;class 'int'&gt;
 &lt;class 'str'&gt;</msg>
-<status status="PASS" starttime="20231122 10:18:14.340" endtime="20231122 10:18:14.340"/>
+<status status="PASS" starttime="20231122 19:19:30.994" endtime="20231122 19:19:30.996"/>
 </kw>
-<status status="PASS" starttime="20231122 10:18:12.330" endtime="20231122 10:18:14.341"/>
+<status status="PASS" starttime="20231122 19:19:28.954" endtime="20231122 19:19:30.996"/>
 </test>
 <test id="s1-t2" name="Teste de Registro" line="19">
 <kw name="Create Session" library="RequestsLibrary">
 <arg>alias=MySession</arg>
 <arg>url=${BASE_URL}</arg>
 <doc>Create Session: create a HTTP session to a server</doc>
-<msg timestamp="20231122 10:18:14.341" level="INFO">Creating Session using : alias=MySession, url=http://localhost:5000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
-<status status="PASS" starttime="20231122 10:18:14.341" endtime="20231122 10:18:14.341"/>
+<msg timestamp="20231122 19:19:30.997" level="INFO">Creating Session using : alias=MySession, url=http://localhost:5000, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20231122 19:19:30.996" endtime="20231122 19:19:30.997"/>
 </kw>
 <kw name="Email" library="FakerLibrary">
 <var>${random_email}</var>
-<msg timestamp="20231122 10:18:14.341" level="INFO">${random_email} = melanie04@example.org</msg>
-<status status="PASS" starttime="20231122 10:18:14.341" endtime="20231122 10:18:14.341"/>
+<msg timestamp="20231122 19:19:30.997" level="INFO">${random_email} = wbooker@example.com</msg>
+<status status="PASS" starttime="20231122 19:19:30.997" endtime="20231122 19:19:30.997"/>
 </kw>
 <kw name="Create Dictionary" library="BuiltIn">
 <var>${data}</var>
 <arg>email=${random_email}</arg>
 <arg>password=test</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<msg timestamp="20231122 10:18:14.342" level="INFO">${data} = {'email': 'melanie04@example.org', 'password': 'test'}</msg>
-<status status="PASS" starttime="20231122 10:18:14.341" endtime="20231122 10:18:14.342"/>
+<msg timestamp="20231122 19:19:30.997" level="INFO">${data} = {'email': 'wbooker@example.com', 'password': 'test'}</msg>
+<status status="PASS" starttime="20231122 19:19:30.997" endtime="20231122 19:19:30.997"/>
 </kw>
 <kw name="Create Dictionary" library="BuiltIn">
 <var>${headers}</var>
 <arg>Content-Type=application/json</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<msg timestamp="20231122 10:18:14.342" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
-<status status="PASS" starttime="20231122 10:18:14.342" endtime="20231122 10:18:14.342"/>
+<msg timestamp="20231122 19:19:30.997" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
+<status status="PASS" starttime="20231122 19:19:30.997" endtime="20231122 19:19:30.998"/>
 </kw>
 <kw name="POST On Session" library="RequestsLibrary">
 <var>${response}</var>
@@ -93,35 +93,35 @@
 <arg>json=${data}</arg>
 <arg>headers=${headers}</arg>
 <doc>Sends a POST request on a previously created HTTP Session.</doc>
-<msg timestamp="20231122 10:18:16.347" level="INFO">POST Request : url=http://localhost:5000/cadastro 
+<msg timestamp="20231122 19:19:33.036" level="INFO">POST Request : url=http://localhost:5000/cadastro 
  path_url=/cadastro 
- headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '54'} 
- body=b'{"email": "melanie04@example.org", "password": "test"}' 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '52'} 
+ body=b'{"email": "wbooker@example.com", "password": "test"}' 
  </msg>
-<msg timestamp="20231122 10:18:16.347" level="INFO">POST Response : url=http://localhost:5000/cadastro 
+<msg timestamp="20231122 19:19:33.036" level="INFO">POST Response : url=http://localhost:5000/cadastro 
  status=200, reason=OK 
- headers={'Server': 'Werkzeug/3.0.1 Python/3.12.0', 'Date': 'Wed, 22 Nov 2023 13:18:16 GMT', 'Content-Type': 'application/json', 'Content-Length': '215', 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Credentials': 'true', 'Connection': 'close'} 
+ headers={'Server': 'Werkzeug/3.0.1 Python/3.12.0', 'Date': 'Wed, 22 Nov 2023 22:19:33 GMT', 'Content-Type': 'application/json', 'Content-Length': '212', 'Access-Control-Allow-Origin': 'http://localhost:3000', 'Access-Control-Allow-Credentials': 'true', 'Connection': 'close'} 
  body={
   "mensagem": "Cadastro realizado com sucesso!",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lbGFuaWUwNEBleGFtcGxlLm9yZyIsImV4cCI6MTcwMDY2MjY5Nn0.51DyXUvHyu7CS96KlJgq_OOn_r2GRKDVro2OYf6KhE8"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Indib29rZXJAZXhhbXBsZS5jb20iLCJleHAiOjE3MDA2OTUxNzN9.IS8SMOwfwKae11z54eYOc1YXx_ztgUIbsm-zrU2L6Zs"
 }
  
  </msg>
-<msg timestamp="20231122 10:18:16.348" level="INFO">${response} = &lt;Response [200]&gt;</msg>
-<status status="PASS" starttime="20231122 10:18:14.342" endtime="20231122 10:18:16.348"/>
+<msg timestamp="20231122 19:19:33.036" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20231122 19:19:30.998" endtime="20231122 19:19:33.036"/>
 </kw>
 <kw name="Should Be Equal As Strings" library="BuiltIn">
 <arg>${response.status_code}</arg>
 <arg>200</arg>
 <doc>Fails if objects are unequal after converting them to strings.</doc>
-<msg timestamp="20231122 10:18:16.348" level="INFO">Argument types are:
+<msg timestamp="20231122 19:19:33.037" level="INFO">Argument types are:
 &lt;class 'int'&gt;
 &lt;class 'str'&gt;</msg>
-<status status="PASS" starttime="20231122 10:18:16.348" endtime="20231122 10:18:16.348"/>
+<status status="PASS" starttime="20231122 19:19:33.037" endtime="20231122 19:19:33.037"/>
 </kw>
-<status status="PASS" starttime="20231122 10:18:14.341" endtime="20231122 10:18:16.348"/>
+<status status="PASS" starttime="20231122 19:19:30.996" endtime="20231122 19:19:33.037"/>
 </test>
-<status status="PASS" starttime="20231122 10:18:11.373" endtime="20231122 10:18:16.349"/>
+<status status="PASS" starttime="20231122 19:19:28.352" endtime="20231122 19:19:33.038"/>
 </suite>
 <statistics>
 <total>

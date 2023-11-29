@@ -15,8 +15,10 @@ const BannerFotosRodizio = () => {
     const fotos = [foto1, foto2, foto3, foto4, foto5, foto6, foto7, foto8];
 
     return (
-        <div className="flex flex-col items-center p-4 bg-orange-500 border-t-5 border-white max-w-full">
-            <h1 className="text-3xl font-bold mb-4 text-white font-cursive">Venha provar nossos sabores!</h1>
+        <div className="flex flex-col items-center justify-center p-4 border-t-5 border-white w-full h-full" style={{background: 'linear-gradient(to bottom, #FB923C, #FDBA74)'}}>
+            <div className="mx-20 w-full h-13" style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '10px', borderRadius: '5px', marginBottom: '20px'}}>
+                <h1 className="text-3xl font-bold mb-1 text-orange-500 font-cursive text-center">Venha provar nossos sabores!</h1>
+            </div>
             <Carousel autoPlay infiniteLoop useKeyboardArrows dynamicHeight className="max-w-full">
                 {fotos.map((foto, index) => (
                     <div key={index}>
