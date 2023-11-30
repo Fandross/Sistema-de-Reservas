@@ -123,7 +123,7 @@ function Dashboard({ isAdmin }) {
     }
   };
 
-  {/* ALGUEM MUDAR AQUI */ }
+
   const cancelarReserva = async (id, token, emailUsuario) => {
     try {
       if (!token) {
@@ -167,7 +167,6 @@ function Dashboard({ isAdmin }) {
       console.error("Failed to cancel reservation: ", error);
     }
   };
-  {/* ALGUEM MUDAR ATE AQUI */ }
 
   return (
     <div className="bg-orange-400 min-h-screen w-full flex flex-col items-center justify-center">
@@ -186,7 +185,6 @@ function Dashboard({ isAdmin }) {
               ))}
             </ul>
 
-            {/* Admin Page */}
             {isAdmin && (
               <div className="mt-8">
                 <h2 className="text-2xl font-bold mb-4">Reservas:</h2>
@@ -243,8 +241,7 @@ function Dashboard({ isAdmin }) {
               </div>
             )}
 
-            {/* ALGUEM MUDAR AQUI */}
-            {/* User Page */}
+
             {!isAdmin && (
               <div className="mt-8">
                 {reservas.length > 0 ? (
