@@ -10,7 +10,6 @@ function Dashboard({ isAdmin }) {
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState('');
 
-  // Função para decodificar o token JWT
   const parseJwt = (token) => {
     try {
       return JSON.parse(atob(token.split('.')[1]));
@@ -19,7 +18,6 @@ function Dashboard({ isAdmin }) {
     }
   };
 
-  // Função para executar o teste
   const executarTesteUnitario = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/rodar-teste-unitario');
@@ -30,7 +28,6 @@ function Dashboard({ isAdmin }) {
     }
   };
 
-  // UseEffect para obter os logs
   useEffect(() => {
     const fetchLogs = async () => {
       try {
@@ -45,7 +42,6 @@ function Dashboard({ isAdmin }) {
     fetchLogs();
   }, []);
 
-  // UseEffect para obter os dados
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,12 +49,10 @@ function Dashboard({ isAdmin }) {
         const eventosData = await eventosResponse.json();
         setEventos(eventosData);
 
-        // Inicializar reservas para cada evento
         const reservasInicializadas = eventosData.map(evento => ({ evento, reservas: [] }));
         setReservas(reservasInicializadas);
 
         if (!isAdmin) {
-          // Obter o token JWT do Local Storage
           const jwtToken = localStorage.getItem('token');
 
           const reservasResponse = await fetch('http://127.0.0.1:5000/reservas', {
@@ -71,11 +65,9 @@ function Dashboard({ isAdmin }) {
           const reservasData = await reservasResponse.json();
           setReservasAtivas(reservasData);
 
-          // Obter o email do usuário do token JWT
           const decodedToken = parseJwt(jwtToken);
           const emailUsuarioLogado = decodedToken.email;
 
-          // Atualizar reservas do usuário
           setReservas((prevReservas) => {
             const novasReservas = prevReservas.map((prevReserva) => {
               const reservasUsuario = reservasData.filter(
@@ -130,6 +122,52 @@ function Dashboard({ isAdmin }) {
       console.error('Erro ao excluir reserva:', error);
     }
   };
+
+  {/* ALGUEM MUDAR AQUI */ }
+  const cancelarReserva = async (id, token, emailUsuario) => {
+    try {
+      if (!token) {
+        throw new Error('Token is null or undefined');
+      }
+  
+      const parsedToken = parseJwt(token);
+  
+      if (!parsedToken || !parsedToken.email) {
+        throw new Error('Failed to parse token or email is not in the token');
+      }
+  
+      const emailConfirmacao = prompt('Por favor, confirme seu email para cancelar a reserva:');
+  
+      if (emailConfirmacao !== emailUsuario) {
+        alert('O email fornecido não corresponde ao email da reserva. A reserva não foi cancelada.');
+        return;
+      }
+  
+      if (parsedToken.email !== emailUsuario) {
+        throw new Error('Email do usuário não corresponde ao email do token');
+      }
+  
+      const email_reserva = parsedToken.email;
+      const response = await fetch(`http://localhost:5000/eventos/${id}/excluir-reserva/${email_reserva}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Include your auth token here
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+  
+      setReservas(reservas.filter(reserva => reserva.evento.id !== id));
+    } catch (error) {
+      console.error("Failed to cancel reservation: ", error);
+    }
+  };
+  {/* ALGUEM MUDAR ATE AQUI */ }
 
   return (
     <div className="bg-orange-400 min-h-screen w-full flex flex-col items-center justify-center">
@@ -205,6 +243,7 @@ function Dashboard({ isAdmin }) {
               </div>
             )}
 
+            {/* ALGUEM MUDAR AQUI */}
             {/* User Page */}
             {!isAdmin && (
               <div className="mt-8">
@@ -216,6 +255,12 @@ function Dashboard({ isAdmin }) {
                         reservasEvento.length > 0 && (
                           <li key={evento.id}>
                             {`${evento.nome} - ${evento.data} às ${evento.horario} (${evento.capacidade} vagas)`} <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+                            <button onClick={() => {
+                              const jwtToken = localStorage.getItem('token');
+                              const decodedToken = parseJwt(jwtToken);
+                              const emailUsuario = decodedToken.email;
+                              cancelarReserva(evento.id, jwtToken, emailUsuario);
+                            }} className="ml-4 bg-red-500 text-white px-2 py-1 rounded">Cancelar Reserva</button>
                           </li>
                         )
                       ))}
@@ -226,6 +271,7 @@ function Dashboard({ isAdmin }) {
                 )}
               </div>
             )}
+            {/* ALGUEM MUDAR ATE AQUI */}
           </>
         )}
       </div>
