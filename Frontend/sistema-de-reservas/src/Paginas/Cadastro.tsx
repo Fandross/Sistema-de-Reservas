@@ -20,8 +20,6 @@ function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
       const data = await response.json();
   
       if (response.ok) {
-        // Se o cadastro for bem-sucedido, atualize o nome do usuário e armazene o token
-
         console.log('Token recebido:', data.token);
         onLogin(email);
         localStorage.setItem('token', data.token);
@@ -45,7 +43,7 @@ function Cadastro({ isAdmin, nomeUsuario, onLogin }) {
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Senha:</label>
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <div className="flex items-center justify-between">
